@@ -16,19 +16,18 @@ public class Cliente {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             stdIn = new BufferedReader(new InputStreamReader(System.in));
 
+            new Thread(() -> readServerResponses()).start();
+
             String userInput;
             while ((userInput = stdIn.readLine()) != null) {
                 out.println(userInput);
-                String serverResponse = in.readLine();
-                System.out.println("Respuesta del servidor: " + serverResponse);
-                if (userInput.equalsIgnoreCase("bye")) {
+                if (userInput.equalsIgnoreCase("chau")) {
                     break;
                 }
             }
 
             in.close();
             out.close();
-            stdIn.close();
             socket.close();
             System.out.println("Desconectado del servidor");
         } catch (IOException e) {
@@ -36,9 +35,20 @@ public class Cliente {
         }
     }
 
+    private void readServerResponses() {
+        try {
+            String serverResponse;
+            while ((serverResponse = in.readLine()) != null) {
+                System.out.println("Respuesta del cliente: " + serverResponse);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         String host = "localhost";
-        int port = 12345;
+        int port = 1024;
         Cliente cliente = new Cliente();
         cliente.start(host, port);
     }
