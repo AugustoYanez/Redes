@@ -16,12 +16,13 @@ public class Cliente2 {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             stdIn = new BufferedReader(new InputStreamReader(System.in));
 
-            new Thread(() -> readServerResponses()).start();
+            new Thread(() -> leerRespuestasServer()).start();
 
-            String userInput;
-            while ((userInput = stdIn.readLine()) != null) {
-                out.println(userInput);
-                if (userInput.equalsIgnoreCase("chau")) {
+            String entradasUser;
+            while ((entradasUser = stdIn.readLine()) != null) {
+                System.out.println("Mensaje enviado: " + entradasUser);
+                out.println(entradasUser);
+                if (entradasUser.equalsIgnoreCase("chau")) {
                     break;
                 }
             }
@@ -35,11 +36,11 @@ public class Cliente2 {
         }
     }
 
-    private void readServerResponses() {
+    private void leerRespuestasServer() {
         try {
-            String serverResponse;
-            while ((serverResponse = in.readLine()) != null) {
-                System.out.println("Respuesta del cliente: " + serverResponse);
+            String respuestServer;
+            while ((respuestServer = in.readLine()) != null) {
+                System.out.println("Respuesta del cliente: " + respuestServer);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,7 +49,7 @@ public class Cliente2 {
 
     public static void main(String[] args) {
         String host = "localhost";
-        int port = 1024;
+        int port = 3345;
         Cliente2 cliente2 = new Cliente2();
         cliente2.start(host, port);
     }
